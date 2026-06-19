@@ -1,0 +1,687 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#FFBE1A;
+  font-family:'Nunito',sans-serif;
+  padding:20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: #111;
+  padding: 18px;
+  border-radius: 0 0 20px 20px; /* Flat on top to align with screen edge */
+  margin-bottom: 20px;
+}
+
+/* Pinned Sticky Behavior */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  margin: -20px -20px 20px -20px; /* Counters body padding to sit flush */
+}
+
+.title {
+  color: #FFBE1A;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+/* Forces everything onto a single line */
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+/* The Unified Search Pill */
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  flex: 1; 
+  background: white;
+  border-radius: 14px;
+  padding: 4px 6px 4px 12px;
+  position: relative;
+}
+
+.search-icon {
+  font-size: 16px;
+  margin-right: 5px;
+}
+
+.search-bar-inner {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 10px 0;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Category Button Inside the Search Bar */
+.cat-btn-inner {
+  background: #f4f4f4;
+  border: none;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cat-btn-inner:hover {
+  background: #e0e0e0;
+}
+
+/* Unified 20x20px Icon Dimension Rules */
+#categoryIcon, #cartIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Cart Button Layout */
+.cart-btn-single {
+  background: #FC0606;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 0 16px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cart-btn-single:hover {
+  background: #d40505;
+}
+
+/* Mobile Media Query Overrides */
+@media (max-width: 600px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hide-mobile {
+    display: none; /* Hides the word "Cart", keeping only the icon */
+  }
+}
+
+/* ═══════════════════════════════════════
+   CATEGORY DROPDOWN
+═══════════════════════════════════════ */
+
+.cat-wrapper{
+  position:relative;
+}
+
+.cat-btn{
+  background:#FC0606;
+  color:white;
+  border:none;
+  padding:12px 18px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:800;
+  font-family:'Nunito',sans-serif;
+  transition:0.2s;
+}
+
+.cat-btn:hover{
+  background:#d40505;
+}
+
+.cat-dropdown{
+  position:absolute;
+  top:60px;
+  right:0;
+  background:white;
+  border-radius:14px;
+  width:max-content;
+  min-width:180px;
+  max-width:90vw;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  overflow:hidden;
+  display:none;
+  flex-direction:column;
+  z-index:99999;
+}
+
+.cat-dropdown.open{
+  display:flex;
+}
+
+.cat-option{
+  padding:14px 18px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700;
+  color:#1a1a1a;
+  border-bottom:1px solid #f1f1f1;
+  transition:0.2s;
+  background:white;
+}
+
+.cat-option:last-child{
+  border-bottom:none;
+}
+
+.cat-option:hover{
+  background:#FFF5D6;
+  color:#000;
+}
+
+.header-right{
+  display:flex;
+  gap:10px;
+}
+
+.cat-btn,
+.cart-btn,
+.checkout-btn,
+.add-btn,
+.done-btn{
+  background:#FC0606;
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:800;
+  padding:12px 18px;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:
+  repeat(auto-fill,minmax(280px,1fr));
+  gap:20px;
+}
+
+/* MOBILE 2 GRID */
+
+@media(max-width:600px){
+
+  .products{
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:12px;
+
+  }
+
+}
+
+.card{
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.card-img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.card-content{
+  padding:14px;
+}
+
+.product-name{
+  font-size:17px;
+  font-weight:800;
+}
+
+.description{
+  font-size:13px;
+  color:#666;
+  margin:8px 0;
+}
+
+.price{
+  color:#0a8a0a;
+  font-size:22px;
+  font-weight:900;
+}
+
+.initial-price{
+  text-decoration:line-through;
+  color:#aaa;
+}
+
+.quantity-box{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+}
+
+.qty-btn{
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:8px;
+  background:#FC0606;
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  z-index:999;
+}
+
+.modal-box{
+  background:#fff;
+  width:100%;
+  max-width:600px;
+  border-radius:22px;
+  padding:24px;
+  max-height:90vh;
+  overflow:auto;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.close-modal{
+  width:36px;
+  height:36px;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+.cart-item-row{
+  display:flex;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.cart-item-row img{
+  width:70px;
+  height:70px;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+.checkout-form{
+  display:none;
+  flex-direction:column;
+  gap:12px;
+  margin-top:20px;
+}
+
+.checkout-form input{
+  padding:14px;
+  border-radius:12px;
+  border:2px solid #eee;
+}
+
+.or-divider{
+  text-align:center;
+  font-size:15px;
+  font-weight:900;
+  color:#555;
+  margin:16px 0;
+  position:relative;
+}
+
+.or-divider::before,
+.or-divider::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:38%;
+  height:2px;
+  background:#e5e5e5;
+}
+
+.or-divider::before{
+  left:0;
+}
+
+.or-divider::after{
+  right:0;
+}
+
+.delivery-option{
+  border:2px solid #eee;
+  border-radius:16px;
+  padding:16px;
+  margin-top:12px;
+}
+
+.delivery-option.active{
+  border-color:#FC0606;
+}
+
+.delivery-desc{
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.summary-box{
+  margin-top:16px;
+  background:#f8f8f8;
+  padding:16px;
+  border-radius:14px;
+}
+
+.delivery-box{
+  background:#fff;
+  border-radius:28px;
+  padding:22px;
+  margin-top:20px;
+  border:3px solid #eee;
+  box-shadow:0 8px 30px rgba(0,0,0,0.08);
+}
+
+.delivery-heading{
+  font-size:32px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.delivery-subheading{
+  font-size:15px;
+  line-height:1.5;
+  margin-bottom:24px;
+  color:#333;
+}
+
+.main-options{
+  display:flex;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.main-option{
+  flex:1;
+  background:#FC0606;
+  color:white;
+  border:none;
+  border-radius:22px;
+  padding:18px;
+  cursor:pointer;
+  transition:0.2s;
+  text-align:center;
+  font-weight:800;
+}
+
+.main-option.active{
+  background:#111;
+}
+
+.main-option img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  margin-bottom:10px;
+}
+
+.sub-option-card{
+  border:3px solid #ddd;
+  border-radius:24px;
+  padding:16px;
+  margin-bottom:16px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.sub-option-card.active{
+  border-color:#FC0606;
+  background:#fff5f5;
+}
+
+.sub-option-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.sub-option-name{
+  font-size:22px;
+  font-weight:900;
+}
+
+.sub-option-fee{
+  font-size:28px;
+  font-weight:900;
+}
+
+.sub-option-desc{
+  font-size:15px;
+  color:#444;
+  line-height:1.4;
+}
+
+.grand-total{
+  background:#111;
+  color:white;
+  border-radius:18px;
+  padding:18px;
+  margin-top:20px;
+  text-align:center;
+  font-size:22px;
+  font-weight:900;
+}
+
+@media (max-width:600px){
+
+  .products{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .header{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .cat-dropdown{
+    right:auto;
+    left:0;
+    max-width:80vw;
+  }
+
+}
+
+.grand-total{
+
+  margin-top:20px;
+  padding:20px;
+  border-radius:18px;
+  background:#000000;
+  border:2px solid #FFBE1A;
+
+}
+
+.done-btn{
+
+  background:#FC0606;
+  color:white;
+  border:none;
+  padding:16px;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+
+}
+
+#loadingOverlay {
+  position: fixed;
+  z-index: 999999;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(255,255,255,0.80);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader {
+  border: 7px solid #eee;
+  border-top: 7px solid #FC0606;
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+/* ═══════════════════════════════════════
+   BANNER CAROUSEL
+   Add these styles to your existing CSS
+═══════════════════════════════════════ */
+
+/* Outer wrapper — place this in your HTML:
+   <div id="bannerCarousel"></div>
+   above your products section            */
+
+#bannerCarousel {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.banner-track-outer {
+  position: relative;
+  width: 100%;
+}
+
+/* Sliding track */
+.banner-track {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* Each slide takes the full width */
+.banner-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;   /* round corners — adjust to match your card style */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Banner image fills the slide */
+.banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;   /* clicks handled by parent div */
+}
+
+/* ── Dot indicators ── */
+.banner-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding-bottom: 4px;
+}
+
+.banner-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.banner-dot.active {
+  background: #FC0606;   /* match your brand colour */
+  transform: scale(1.35);
+}
+
+/* ── Active-filter pill shown above products ── */
+.banner-filter-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff3f3;
+  border: 1.5px solid #FC0606;
+  border-radius: 30px;
+  padding: 7px 16px;
+  margin-bottom: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+}
+
+.banner-filter-pill button {
+  background: #FC0606;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 3px 11px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+/* PWA Install Button */
+.install-pwa-btn {
+  background: #FFBE1A;
+  color: #111;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 900;
+  font-size: 12px;
+  cursor: pointer;
+  align-items: center;
+  gap: 5px;
+  transition: transform 0.2s ease, background 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.install-pwa-btn:hover {
+  transform: scale(1.05);
+  background: #f0b010;
+}

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Store</title>
+  
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FC0606">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+</head>
+
+<body>
+
+<div id="loadingOverlay" style="display: none;">
+  <div class="loader"></div>
+</div>
+  
+<div class="header sticky-header">
+
+<div class="title-wrapper" style="display: flex; align-items: center; gap: 12px;">
+      <div class="title">
+        🛍️ Store
+      </div>
+      <button id="installPwaBtn" class="install-pwa-btn" style="display: none;">
+        ⬇️ Install App
+      </button>
+    </div>
+
+    <div class="header-actions">
+
+      <div class="search-bar-container">
+        
+        <span class="search-icon">🔍</span>
+        
+        <input
+          id="searchInput"
+          class="search-bar-inner"
+          type="text"
+          placeholder="Search products..."
+          oninput="renderProducts()"
+        >
+
+        <div class="cat-wrapper" style="position: relative; display: inline-block;">
+  
+  <button class="cat-btn-inner" onclick="toggleCatDropdown()" style="
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #222222; /* Matches your dark theme; adjust if needed */
+    border: 2px solid #FFBE1A;  /* Accent border color */
+    border-radius: 50px;       /* Gives it a perfect modern pill shape */
+    cursor: pointer;
+    white-space: nowrap;       /* Prevents text from breaking into 2 lines */
+    min-width: 90px;           /* Minimum size for short text like 'All' */
+    transition: transform 0.2s ease;
+  ">
+    
+    <!-- Icon / Image Container -->
+    <img id="categoryIcon" src="" alt="Filter" style="display: none; width: 16px; height: 16px; object-fit: contain;">
+    <span id="catFallback" style="font-size: 16px; display: inline-flex; align-items: center; line-height: 1;">📂</span>
+    
+    <!-- Category Text Label -->
+    <span id="catLabel" style="
+      color: #ffffff; 
+      font-weight: 700; 
+      font-size: 14px; 
+      line-height: 1;          /* Forces text to align flat with the emoji */
+    ">All</span>
+    
+    <!-- Clean dropdown arrow indicator -->
+    <span style="color: #FFBE1A; font-size: 10px; margin-left: 2px; line-height: 1;">▼</span>
+
+  </button>
+  
+  <div class="cat-dropdown" id="catDropdown"></div>
+</div>
+
+      </div>
+
+      <button class="cart-btn-single" onclick="openCart()">
+        <img id="cartIcon" src="" alt="Cart" style="display: none;">
+        <span id="cartFallback">🛒</span>
+        
+        <span class="hide-mobile">Cart</span>
+        <div class="cart-count" id="cartCount">0</div>
+      </button>
+
+    </div>
+
+  </div>
+
+<div id="bannerCarousel"></div>
+  
+  <div
+    class="products"
+    id="products"
+  ></div>
+
+  <!-- CART -->
+
+  <div
+    class="modal-overlay"
+    id="cartModal"
+  >
+
+    <div class="modal-box">
+
+      <div class="modal-header">
+
+        <div class="modal-title">
+          🛒 Your Cart
+        </div>
+
+        <button
+          class="close-modal"
+          onclick="closeCart()"
+        >
+          ✕ Back
+        </button>
+
+      </div>
+
+      <div id="cartItems"></div>
+
+      <button
+        class="checkout-btn"
+        onclick="openCheckout()"
+      >
+
+        Proceed To Checkout →
+
+      </button>
+
+      <!-- CHECKOUT -->
+
+      <div
+        class="checkout-form"
+        id="checkoutForm"
+      >
+
+        <input
+          type="tel"
+          id="checkoutPhone"
+          placeholder="Enter your delivery phone number"
+        >
+
+        <button
+          class="checkout-btn"
+          onclick="findDeliveryInfo()"
+        >
+
+          Continue →
+
+        </button>
+
+        <div id="deliveryUI"></div>
+        
+        <div id="deliveryOptions"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
