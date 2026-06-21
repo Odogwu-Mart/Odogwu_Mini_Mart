@@ -1278,12 +1278,19 @@ async function sendWhatsAppOrder(grandTotal){
     document.getElementById("checkoutPhone").value
   );
 
-  let itemsTotal = 0;
-  let products   = [];
-  let quantities = [];
+  // Extract the customer name from the Sheet3 lookup results
+  let customerName = "New Customer"; 
+  if (latestDeliveryRow) {
+    customerName = latestDeliveryRow.name || latestDeliveryRow["Name"] || latestDeliveryRow["name"] || "Valued Customer";
+  }
 
-let msg = "🛒 *NEW ORDER*%0A%0A";
-  msg    += "📱 Phone: " + customerPhone + "%0A";
+  let itemsTotal = 0;
+  let formattedProductsList = "PRODUCTNAME------QTY";
+
+  // Build the WhatsApp message template with the customer's name
+  let msg = "🛒 *NEW ORDER*%0A%0A";
+  msg    += "👤 *Name:* " + customerName + "%0A";
+  msg    += "📱 *Phone:* " + customerPhone + "%0A";
 
   let fetchedAddress1 = "";
   let fetchedAddress2 = "";
@@ -1309,10 +1316,8 @@ let msg = "🛒 *NEW ORDER*%0A%0A";
     const subtotal = Number(product.price) * item.quantity;
     itemsTotal += subtotal;
 
-    products.push(product.product_name);
-    quantities.push(item.quantity);
+    formattedProductsList += `\n${product.product_name}------${item.quantity}`;
     
-    // Formatting the individual items
     msg += "%0A🔹 *" + product.product_name + "*%0A";
     msg += "Qty: " + item.quantity + "%0A";
     msg += "Subtotal: ₦" + fmt(subtotal) + "%0A";
@@ -1329,46 +1334,39 @@ let msg = "🛒 *NEW ORDER*%0A%0A";
   msg += "🚚 Delivery Fee: ₦" + fmt(selectedDeliveryOption.fee) + "%0A";
   msg += "%0A💰 *Grand Total: ₦" + fmt(grandTotal) + "*";
 
-  // 1. Show loading screen to prevent double-clicks
   showLoading();
 
-  // 2. Await the save function and capture the result
+  // Send the payload without the quantities column, including the name column
   const isSaved = await saveOrderToSheet4({
     timestamp:            new Date().toISOString(),
+    name:                 customerName,
     phone:                customerPhone,
     selected_main_option: mainOption,
     selected_sub_option:  selectedDeliveryOption.title,
     address_1:            fetchedAddress1, 
     address_2:            fetchedAddress2,
-    products:             products.join(", "),
-    quantities:           quantities.join(", "),
+    products:             formattedProductsList, 
     items_total:          itemsTotal,
     delivery_fee:         selectedDeliveryOption.fee,
     grand_total:          grandTotal
   });
 
-  // 3. Hide loading screen
   hideLoading();
 
-  // 4. Handle success or failure
   if (isSaved) {
     cart = [];
     updateCartCount();
     localStorage.removeItem("odogwu_cart");
 
-    // Close the cart/checkout UI cleanly
     document.getElementById("checkoutForm").style.display = "none";
     closeCart(); 
 
-    // Clean and safely encode the message for WhatsApp
     const cleanMsg = msg.replace(/%0A/g, '\n');
     const safeMsg = encodeURIComponent(cleanMsg);
     const waLink = "https://wa.me/" + whatsappNumber + "?text=" + safeMsg;
 
-    // Attempt the automatic redirect
     window.location.href = waLink;
 
-    // Provide a fallback UI just in case the browser blocked the redirect
     document.getElementById("checkoutForm").innerHTML = `
       <div style="padding: 40px; text-align: center;">
         <h2 style="color: #0a8a0a;">Order Saved! ✅</h2>
@@ -1380,7 +1378,6 @@ let msg = "🛒 *NEW ORDER*%0A%0A";
     `;
     
   } else {
-    // Alert the user if the network failed, keeping their cart intact
     alert("There was an issue processing your order. Please check your internet connection and try again.");
   }
 }
