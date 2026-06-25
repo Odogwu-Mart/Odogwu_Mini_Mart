@@ -1287,10 +1287,8 @@ async function sendWhatsAppOrder(grandTotal){
   let itemsTotal = 0;
   let formattedProductsList = "PRODUCTNAME------QTY";
 
-  // Build the WhatsApp message template with the customer's name
+  // Build the WhatsApp message template (Name, Phone, and Addresses removed)
   let msg = "🛒 *NEW ORDER*%0A%0A";
-  msg    += "👤 *Name:* " + customerName + "%0A";
-  msg    += "📱 *Phone:* " + customerPhone + "%0A";
 
   let fetchedAddress1 = "";
   let fetchedAddress2 = "";
@@ -1300,13 +1298,7 @@ async function sendWhatsAppOrder(grandTotal){
     fetchedAddress2 = latestDeliveryRow.address2 || latestDeliveryRow["Address 2"] || latestDeliveryRow["address 2"] || "";
   }
 
-  if (selectedDeliveryOption.title !== "Pick-up" && (fetchedAddress1 || fetchedAddress2)) {
-    msg += "%0A📍 *Saved Addresses:*%0A";
-    if (fetchedAddress1) msg += "🏠 Addr 1: " + fetchedAddress1 + "%0A";
-    if (fetchedAddress2) msg += "🏢 Addr 2: " + fetchedAddress2 + "%0A";
-  }
-
-  msg    += "%0A━━━━━━━━━━━━━━%0A";
+  msg    += "━━━━━━━━━━━━━━%0A";
   msg    += "🛍️ *ITEMS:*%0A";
 
   cart.forEach(item => {
@@ -1336,7 +1328,7 @@ async function sendWhatsAppOrder(grandTotal){
 
   showLoading();
 
-  // Send the payload without the quantities column, including the name column
+  // Send the payload to your Google Sheet (Personal data is kept here so your database is complete)
   const isSaved = await saveOrderToSheet4({
     timestamp:            new Date().toISOString(),
     name:                 customerName,
