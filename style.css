@@ -5,7 +5,7 @@
 }
 
 body{
-  background:#FFBE1A;
+  background:#FFFAE1;
   font-family:'Nunito',sans-serif;
   padding:20px;
 }
@@ -14,7 +14,7 @@ body{
   display: flex;
   flex-direction: column;
   gap: 15px;
-  background: #111;
+  background: #FFBE1A;
   padding: 18px;
   border-radius: 0 0 20px 20px; /* Flat on top to align with screen edge */
   margin-bottom: 20px;
@@ -30,9 +30,9 @@ body{
 }
 
 .title {
-  color: #FFBE1A;
-  font-size: 28px;
-  font-weight: 900;
+  color: #000000;
+  font-size: 15px;
+  font-weight: 800;
 }
 
 /* Forces everything onto a single line */
@@ -97,10 +97,10 @@ body{
 
 /* Cart Button Layout */
 .cart-btn-single {
-  background: #FC0606;
+  background: #000000;
   color: white;
   border: none;
-  border-radius: 14px;
+  border-radius: 50px;
   padding: 0 16px;
   height: 48px;
   display: flex;
@@ -113,7 +113,7 @@ body{
 }
 
 .cart-btn-single:hover {
-  background: #d40505;
+  background: #595858;
 }
 
 /* Mobile Media Query Overrides */
@@ -135,7 +135,7 @@ body{
 }
 
 .cat-btn{
-  background:#FC0606;
+  background:#FFFFFF;
   color:white;
   border:none;
   padding:12px 18px;
@@ -201,7 +201,7 @@ body{
 .checkout-btn,
 .add-btn,
 .done-btn{
-  background:#FC0606;
+  background:#FF0004;
   color:#fff;
   border:none;
   border-radius:12px;
@@ -233,7 +233,7 @@ body{
 }
 
 .card{
-  background:#fff;
+  background:#FFFFFF;
   border-radius:18px;
   overflow:hidden;
 }
@@ -282,7 +282,7 @@ body{
   height:34px;
   border:none;
   border-radius:8px;
-  background:#FC0606;
+  background:#FF0004;
   color:#fff;
   font-size:20px;
   cursor:pointer;
@@ -300,7 +300,7 @@ body{
 }
 
 .modal-box{
-  background:#fff;
+  background:#FFFFFF;
   width:100%;
   max-width:600px;
   border-radius:22px;
@@ -314,6 +314,12 @@ body{
   justify-content:space-between;
   align-items:center;
   margin-bottom:18px;
+}
+
+.modal-title {
+  font-size: 20px;       /* Increase this number to make it bigger (e.g., 28px, 32px) */
+  font-weight: 900;      /* Keeps it thick and bold to match your brand */
+  color: #111;           /* Optional: change the text color here */
 }
 
 .close-modal{
@@ -385,7 +391,7 @@ body{
 }
 
 .delivery-option.active{
-  border-color:#FC0606;
+  border-color:#FF0004;
 }
 
 .delivery-desc{
@@ -431,11 +437,11 @@ body{
 
 .main-option{
   flex:1;
-  background:#FC0606;
+  background:#FF0004;
   color:white;
   border:none;
   border-radius:22px;
-  padding:18px;
+  padding:5px;
   cursor:pointer;
   transition:0.2s;
   text-align:center;
@@ -449,8 +455,8 @@ body{
 .main-option img{
   width:42px;
   height:42px;
-  object-fit:contain;
-  margin-bottom:10px;
+  object-fit: contain;
+  margin-bottom:2px;
 }
 
 .sub-option-card{
@@ -463,7 +469,7 @@ body{
 }
 
 .sub-option-card.active{
-  border-color:#FC0606;
+  border-color:#FF0004;
   background:#fff5f5;
 }
 
@@ -491,7 +497,7 @@ body{
 }
 
 .grand-total{
-  background:#111;
+  background:#FFFFFF;
   color:white;
   border-radius:18px;
   padding:18px;
@@ -526,13 +532,13 @@ body{
   padding:20px;
   border-radius:18px;
   background:#000000;
-  border:2px solid #FFBE1A;
+  border:2px solid #000000;
 
 }
 
 .done-btn{
 
-  background:#FC0606;
+  background:#FF0004;
   color:white;
   border:none;
   padding:16px;
@@ -556,7 +562,7 @@ body{
 
 .loader {
   border: 7px solid #eee;
-  border-top: 7px solid #FC0606;
+  border-top: 7px solid #FF0004;
   border-radius: 50%;
   width: 54px;
   height: 54px;
@@ -634,7 +640,7 @@ body{
 }
 
 .banner-dot.active {
-  background: #FC0606;   /* match your brand colour */
+  background: #FF0004;   /* match your brand colour */
   transform: scale(1.35);
 }
 
@@ -644,7 +650,7 @@ body{
   align-items: center;
   gap: 10px;
   background: #fff3f3;
-  border: 1.5px solid #FC0606;
+  border: 1.5px solid #FF0004;
   border-radius: 30px;
   padding: 7px 16px;
   margin-bottom: 14px;
@@ -654,7 +660,7 @@ body{
 }
 
 .banner-filter-pill button {
-  background: #FC0606;
+  background: #FF0004;
   color: #fff;
   border: none;
   border-radius: 20px;
