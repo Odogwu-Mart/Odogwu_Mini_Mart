@@ -691,3 +691,90 @@ body{
   transform: scale(1.05);
   background: #f0b010;
 }
+
+/* ═══════════════════════════════════════
+   PRODUCT TAG BADGES
+═══════════════════════════════════════ */
+
+/* Container wrapper for image + tags */
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.card-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Tag badges container — positioned top-right */
+.product-tags {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: flex-end;
+  max-width: 85%;
+}
+
+/* Individual tag badge styling */
+.tag-badge {
+  display: inline-block;
+  background: #FC0606;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Optional: Hover effect */
+.tag-badge:hover {
+  background: #e60505;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+/* Alternative color scheme (if needed) */
+.tag-badge.new {
+  background: #00a86b;
+}
+
+.tag-badge.exclusive {
+  background: #ff6b35;
+}
+
+.tag-badge.bestselling {
+  background: #a020f0;
+}
+
+/* Ensure card still looks good */
+.card {
+  position: relative;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+  .tag-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    max-width: 80px;
+  }
+
+  .product-tags {
+    top: 6px;
+    right: 6px;
+    gap: 4px;
+  }
+}
