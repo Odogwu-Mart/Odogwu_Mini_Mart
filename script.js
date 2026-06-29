@@ -661,6 +661,21 @@ function sid(cid){
    RENDER PRODUCTS
 ═══════════════════════════════════════ */
 
+/* ═══════════════════════════════════════
+   RENDER PRODUCTS
+═══════════════════════════════════════ */
+
+/* ─── Helper: Parse tags from product ─── */
+function parseTags(tagString){
+  if(!tagString) return [];
+  
+  return String(tagString)
+    .split(/[,;|]/)  // Split by comma, semicolon, or pipe
+    .map(t => t.trim())
+    .filter(t => t.length > 0)
+    .slice(0, 3);  // Limit to max 3 tags per card
+}
+
 function renderProducts(){
   const container = document.getElementById("products");
   const filtered  = getFiltered();
@@ -687,6 +702,23 @@ function renderProducts(){
     const hasVars = card.variants.length > 0;
     const allVars = [p, ...card.variants];
     const expanded = expandedCards.has(cid);
+
+    /* ─── Extract and parse tags ─── */
+    const tags = parseTags(p.tags || "");
+     const tagsHTML = tags.length > 0
+    ? `
+      <div class="product-tags">
+        ${tags.map(tag => {
+          let tagClass = "";
+          if(tag.toLowerCase() === "new") tagClass = "new";
+          else if(tag.toLowerCase() === "exclusive") tagClass = "exclusive";
+          else if(tag.toLowerCase() === "bestselling") tagClass = "bestselling";
+          
+          return `<span class="tag-badge ${tagClass}">${escHtml(tag)}</span>`;
+        }).join("")}
+      </div>
+    `
+    : "";
 
     let actionHTML = "";
 
@@ -738,7 +770,10 @@ function renderProducts(){
     htmlContent += `
       <div class="card">
         <div id="normal-${domId}" ${expanded ? 'style="display:none"' : ""}>
-          <img class="card-img" src="${p.image}">
+          <div class="card-image-wrapper">
+            <img class="card-img" src="${p.image}">
+            ${tagsHTML}
+          </div>
           <div class="card-content">
             <div class="product-name">${p.product_name}</div>
             <div class="description">${p.description}</div>
@@ -764,7 +799,6 @@ function renderProducts(){
   // Send the finished structure to the visual screen layout exactly ONCE
   container.innerHTML = htmlContent;
 }
-
 
 /* ═══════════════════════════════════════
    EXPAND / COLLAPSE
@@ -940,13 +974,24 @@ function openCheckout(){
    FIND DELIVERY INFO
 ═══════════════════════════════════════ */
 
+/* ═══════════════════════════════════════
+   FIND DELIVERY INFO (WITH SANITY GUARDS)
+═══════════════════════════════════════ */
+
 async function findDeliveryInfo() {
+  const phoneRaw = document.getElementById("checkoutPhone").value.trim();
+
+  // Guard Clause 1: If input is empty, do not submit to the server!
+  // Instantly route to "no delivery record" fallback option UI.
+  if (!phoneRaw) {
+    latestDeliveryRow = null;
+    renderNoDeliveryFound();
+    return;
+  }
 
   showLoading();
 
-  const phone = normalizePhone(
-    document.getElementById("checkoutPhone").value
-  );
+  const phone = normalizePhone(phoneRaw);
 
   try {
     const response = await fetch(API_URL, {
@@ -967,8 +1012,18 @@ async function findDeliveryInfo() {
     }
 
     if(result.found && result.data){
-      latestDeliveryRow = result.data;
-      renderDeliveryUI();
+      // Guard Clause 2: Check for a matching empty spreadsheet row (Google Sheet edge case)
+      // If all elements of result.data are empty strings or null, treat it as not found.
+      const dataValues = Object.values(result.data).map(v => v !== null ? String(v).trim() : "");
+      const hasRealContent = dataValues.some(v => v !== "");
+
+      if (hasRealContent) {
+        latestDeliveryRow = result.data;
+        renderDeliveryUI();
+      } else {
+        latestDeliveryRow = null;
+        renderNoDeliveryFound();
+      }
     } else {
       latestDeliveryRow = null;
       renderNoDeliveryFound();
