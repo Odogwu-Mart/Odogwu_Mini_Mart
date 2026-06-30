@@ -549,51 +549,134 @@ function groupProducts(){
    CATEGORIES
 ═══════════════════════════════════════ */
 
+/* ─── Helper: Parse multiple categories from product ─── */
+function parseCategoriesFromProduct(categoryString){
+  if(!categoryString) return [];
+  
+  return String(categoryString)
+    .split(/[,;|]/)  // Split by comma, semicolon, or pipe
+    .map(c => c.trim())
+    .filter(c => c.length > 0);
+}
+
+/* ═══════════════════════════════════════
+   BUILD CATEGORIES
+═══════════════════════════════════════ */
+
 function buildCategories(){
 
   const set = new Set();
 
+  // Extract all unique categories from products
+  // Each product can have multiple categories
   rawProducts.forEach(p => {
-    if(p.category) set.add(p.category.trim());
+    const cats = parseCategoriesFromProduct(p.category || "");
+    cats.forEach(cat => set.add(cat));
   });
 
-  categories = ["All", ...Array.from(set)];
+  categories = ["All", ...Array.from(set).sort()];
 
-  document.getElementById("catDropdown").innerHTML =
-    categories.map((c, index) => `
-      <div class="cat-option" onclick="selectCategory(${index})">
-        ${c}
-      </div>
-    `).join("");
+  renderCategoryChips();
 
 }
 
-function selectCategory(index){
-  selectedCat = categories[index];
-  
-  // 1. Safe Null-Check: Only update the label text if the element actually exists
-  const catLabelEl = document.getElementById("catLabel");
-  if (catLabelEl) {
-    catLabelEl.textContent = selectedCat;
+/* ═══════════════════════════════════════
+   RENDER CATEGORY CHIPS
+═══════════════════════════════════════ */
+
+function renderCategoryChips(){
+
+  const wrapper = document.getElementById("chipsWrapper");
+  const expandedMenu = document.getElementById("categoryExpandedMenu");
+
+  if(!wrapper || !expandedMenu) return;
+
+  // Reset
+  wrapper.innerHTML = "";
+  expandedMenu.innerHTML = "";
+
+  // Max chips to show in main row (before expand button)
+  const maxChipsInRow = 4;
+
+  // First chip is always "All" or the currently selected category
+  const firstChips = selectedCat !== "All"
+    ? [selectedCat]
+    : ["All"];
+
+  // Remaining categories for the expanded menu
+  const remainingCategories = categories.filter(c => !firstChips.includes(c));
+
+  // Render first chip(s) in main row
+  firstChips.forEach(cat => {
+    const chip = document.createElement("button");
+    chip.className = `category-chip ${cat === selectedCat ? "active" : ""}`;
+    chip.textContent = cat;
+    chip.onclick = () => selectCategory(cat);
+    wrapper.appendChild(chip);
+  });
+
+  // Render other chips that fit in main row
+  for(let i = 0; i < Math.min(maxChipsInRow - firstChips.length, remainingCategories.length); i++){
+    const cat = remainingCategories[i];
+    const chip = document.createElement("button");
+    chip.className = "category-chip";
+    chip.textContent = cat;
+    chip.onclick = () => selectCategory(cat);
+    wrapper.appendChild(chip);
   }
-  
-  // 2. Usability Fix: Automatically close the dropdown after clicking an option
-  const catDropdownEl = document.getElementById("catDropdown");
-  if (catDropdownEl) {
-    catDropdownEl.classList.remove("open");
+
+  // If there are more categories, show expand button
+  const expandBtn = document.getElementById("chipsExpandBtn");
+  if(remainingCategories.length > maxChipsInRow - firstChips.length){
+    expandBtn.style.display = "flex";
+
+    // Populate expanded menu
+    const hiddenCategories = remainingCategories.slice(maxChipsInRow - firstChips.length);
+
+    hiddenCategories.forEach(cat => {
+      const item = document.createElement("button");
+      item.className = `category-menu-item ${cat === selectedCat ? "active" : ""}`;
+      item.textContent = cat;
+      item.onclick = () => {
+        selectCategory(cat);
+        toggleCategoryExpand(); // Auto-collapse after selection
+      };
+      expandedMenu.appendChild(item);
+    });
+  } else {
+    expandBtn.style.display = "none";
   }
-  
+
+}
+
+function selectCategory(catName){
+
+  selectedCat = catName;
+  renderCategoryChips();
   renderProducts();
+
 }
 
-function toggleCatDropdown(){
-  document.getElementById("catDropdown").classList.toggle("open");
+function toggleCategoryExpand(){
+
+  const expandBtn = document.getElementById("chipsExpandBtn");
+  const expandedMenu = document.getElementById("categoryExpandedMenu");
+
+  if(!expandBtn || !expandedMenu) return;
+
+  expandedMenu.classList.toggle("open");
+  expandBtn.classList.toggle("expanded");
+
 }
 
+// Close expanded menu when clicking outside
 document.addEventListener("click", function(e){
-  const wrapper = document.querySelector(".cat-wrapper");
-  if(!wrapper.contains(e.target)){
-    document.getElementById("catDropdown").classList.remove("open");
+  const section = document.getElementById("categoryChipsSection");
+  if(section && !section.contains(e.target)){
+    const expandedMenu = document.getElementById("categoryExpandedMenu");
+    const expandBtn = document.getElementById("chipsExpandBtn");
+    if(expandedMenu) expandedMenu.classList.remove("open");
+    if(expandBtn) expandBtn.classList.remove("expanded");
   }
 });
 
@@ -624,10 +707,16 @@ function getFiltered(){
     }
 
     /* ── Category filter ── */
-    if(selectedCat !== "All" && !all.some(item =>
-      (item.category || "").trim() === selectedCat
-    )){
-      return false;
+    if(selectedCat !== "All"){
+      const hasCatMatch = all.some(item => {
+        // Parse multiple categories from the product
+        const productCats = parseCategoriesFromProduct(item.category || "");
+        // Check if selectedCat is in this product's categories
+        return productCats.some(cat => 
+          cat.trim().toLowerCase() === selectedCat.trim().toLowerCase()
+        );
+      });
+      if(!hasCatMatch) return false;
     }
 
     /* ── Search filter ── */
@@ -656,10 +745,6 @@ function sid(cid){
   return String(cid).replace(/[^a-zA-Z0-9_]/g, "_");
 }
 
-
-/* ═══════════════════════════════════════
-   RENDER PRODUCTS
-═══════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
    RENDER PRODUCTS
