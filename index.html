@@ -60,44 +60,6 @@
           placeholder="Search products..."
           oninput="renderProducts()"
         >
-
-        <div class="cat-wrapper" style="position: relative; display: inline-block;">
-  
-  <button class="cat-btn-inner" onclick="toggleCatDropdown()" style="
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background-color: #ffffff; /* Matches your dark theme; adjust if needed */
-    border: 2px solid #000000;  /* Accent border color */
-    border-radius: 50px;       /* Gives it a perfect modern pill shape */
-    cursor: pointer;
-    white-space: nowrap;       /* Prevents text from breaking into 2 lines */
-    min-width: 90px;           /* Minimum size for short text like 'All' */
-    transition: transform 0.2s ease;
-  ">
-    
-    <!-- Icon / Image Container -->
-    <img id="categoryIcon" src="" alt="Filter" style="display: none; width: 16px; height: 16px; object-fit: contain;">
-    <span id="catFallback" style="font-size: 16px; display: inline-flex; align-items: center; line-height: 1;">📂</span>
-    
-    <!-- Category Text Label -->
-    <span id="catLabel" style="
-      color: #000000; 
-      font-weight: 700; 
-      font-size: 14px; 
-      line-height: 1;          /* Forces text to align flat with the emoji */
-    ">All</span>
-    
-    <!-- Clean dropdown arrow indicator -->
-    <span style="color: #000000; font-size: 10px; margin-left: 2px; line-height: 1;">▼</span>
-
-  </button>
-  
-  <div class="cat-dropdown" id="catDropdown"></div>
-</div>
-
       </div>
 
       <button class="cart-btn-single" onclick="openCart()">
@@ -109,6 +71,17 @@
       </button>
 
     </div>
+
+	<!-- CATEGORY CHIPS SECTION -->
+<div id="categoryChipsSection" class="category-chips-section">
+  <div class="chips-scroll-container">
+    <div class="chips-wrapper" id="chipsWrapper"></div>
+    <button class="chips-expand-btn" id="chipsExpandBtn" onclick="toggleCategoryExpand()">
+      <span id="expandArrow">▼</span>
+    </button>
+  </div>
+  <div class="category-expanded-menu" id="categoryExpandedMenu"></div>
+</div>
 
   </div>
 
