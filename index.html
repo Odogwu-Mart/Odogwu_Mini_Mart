@@ -2,57 +2,39 @@
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odogwu Mini-Mart</title>
   
   <link rel="icon" type="image/png" href="icon-192.png">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#FC0606">
+  <meta name="theme-color" content="#FF0004">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
-    rel="stylesheet"
-  >
-
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<div id="loadingOverlay" style="display: none;">
-  <div class="loader"></div>
-</div>
-  
-<div class="header sticky-header">
+  <!-- LOADING OVERLAY -->
+  <div id="loadingOverlay" style="display: none;">
+    <div class="loader"></div>
+  </div>
 
-<div class="title-wrapper" style="display: flex; align-items: center; gap: 12px;">
-      <div class="title">
-        🛍️ Odogwu Mini-Mart
-      </div>
+  <!-- HEADER -->
+  <div class="header sticky-header">
+    <div class="title-wrapper">
+      <div class="title">🛍️ Odogwu Mini-Mart</div>
       <button id="installPwaBtn" class="install-pwa-btn" style="display: none;">
         ⬇️ Install App
       </button>
     </div>
 
     <div class="header-actions">
-
       <div class="search-bar-container">
-        
         <span class="search-icon">🔍</span>
-        
         <input
           id="searchInput"
           class="search-bar-inner"
@@ -61,105 +43,134 @@
           oninput="renderProducts()"
         >
       </div>
-
-      <button class="cart-btn-single" onclick="openCart()">
-        <img id="cartIcon" src="" alt="Cart" style="display: none;">
-        <span id="cartFallback">🛒</span>
-        
-        <span class="hide-mobile">Cart</span>
-        <div class="cart-count" id="cartCount">0</div>
-      </button>
-
     </div>
 
-	<!-- CATEGORY CHIPS SECTION -->
-<div id="categoryChipsSection" class="category-chips-section">
-  <div class="chips-scroll-container">
-    <div class="chips-wrapper" id="chipsWrapper"></div>
-    <button class="chips-expand-btn" id="chipsExpandBtn" onclick="toggleCategoryExpand()">
-      <span id="expandArrow">▼</span>
-    </button>
+    <!-- CATEGORY CHIPS SECTION -->
+    <div id="categoryChipsSection" class="category-chips-section">
+      <div class="chips-scroll-container">
+        <div class="chips-wrapper" id="chipsWrapper"></div>
+        <button class="chips-expand-btn" id="chipsExpandBtn" onclick="toggleCategoryExpand()">
+          <span id="expandArrow">▼</span>
+        </button>
+      </div>
+      <div class="category-expanded-menu" id="categoryExpandedMenu"></div>
+    </div>
   </div>
-  <div class="category-expanded-menu" id="categoryExpandedMenu"></div>
-</div>
 
-  </div>
+  <!-- BANNER CAROUSEL -->
+  <div id="bannerCarousel"></div>
 
-<div id="bannerCarousel"></div>
-  
-  <div
-    class="products"
-    id="products"
-  ></div>
+  <!-- PRODUCTS GRID -->
+  <div class="products" id="products"></div>
 
-  <!-- CART -->
+  <!-- DETAILS PAGE -->
+  <div class="details-page" id="detailsPage">
+    <div class="details-container">
+      <h2 class="details-title">📋 Delivery Information</h2>
+      
+      <!-- Delivery Info Form -->
+      <div class="delivery-info-form">
+        <h3 class="form-subtitle">Fill in Your Details</h3>
+        <button class="open-form-btn" onclick="openDeliveryForm()">
+          ➕ Add/Update Delivery Info
+        </button>
+      </div>
 
-  <div
-    class="modal-overlay"
-    id="cartModal"
-  >
-
-    <div class="modal-box">
-
-      <div class="modal-header">
-
-        <div class="modal-title">
-          🛒 Your Cart
+      <!-- Cached Delivery Info Display -->
+      <div id="cachedDeliveryInfo" class="cached-delivery-section" style="display: none;">
+        <h3 class="form-subtitle">Your Saved Information</h3>
+        <div class="delivery-info-card">
+          <div class="info-row">
+            <span class="info-label">👤 Name:</span>
+            <span class="info-value" id="displayName">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">📱 Phone:</span>
+            <span class="info-value" id="displayPhone">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">📍 Address:</span>
+            <span class="info-value" id="displayAddress">-</span>
+          </div>
         </div>
-
-        <button
-          class="close-modal"
-          onclick="closeCart()"
-        >
-          ✕
+        <button class="update-info-btn" onclick="clearCachedDeliveryInfo()">
+          🔄 Update Information
         </button>
-
       </div>
+    </div>
+  </div>
 
-      <div id="cartItems"></div>
-
-      <button
-        class="checkout-btn"
-        onclick="openCheckout()"
-      >
-
-        Proceed To Checkout →
-
-      </button>
-
-      <!-- CHECKOUT -->
-
-      <div
-        class="checkout-form"
-        id="checkoutForm"
-      >
-
-        <input
-          type="tel"
-          id="checkoutPhone"
-          placeholder="Enter your delivery phone number"
-        >
-
-        <button
-          class="checkout-btn"
-          onclick="findDeliveryInfo()"
-        >
-
-          Continue →
-
-        </button>
-
-        <div id="deliveryUI"></div>
-        
-        <div id="deliveryOptions"></div>
-
-      </div>
-
+  <!-- CART SLIDE-UP MODAL -->
+  <div class="cart-slide-overlay" id="cartSlideOverlay"></div>
+  <div class="cart-slide-modal" id="cartSlideModal">
+    <div class="cart-slide-handle"></div>
+    
+    <div class="cart-slide-header">
+      <h2>🛒 Your Cart</h2>
+      <button class="cart-close-btn" onclick="closeCart()">✕</button>
     </div>
 
+    <div class="cart-slide-content">
+      <div id="cartItems"></div>
+      <div id="emptyCartMessage" class="empty-cart-message" style="display: none;">
+        <p>Your cart is empty</p>
+      </div>
+    </div>
+
+    <div class="cart-slide-footer">
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span id="subtotalDisplay">₦0</span>
+        </div>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()">
+        Proceed To Checkout →
+      </button>
+    </div>
+
+    <!-- CHECKOUT FORM -->
+    <div class="checkout-form" id="checkoutForm">
+      <div class="checkout-header">
+        <button class="back-btn" onclick="backToCart()">← Back</button>
+        <h3>Checkout</h3>
+        <div></div>
+      </div>
+
+      <input
+        type="tel"
+        id="checkoutPhone"
+        placeholder="Enter your phone number"
+        class="checkout-input"
+      >
+
+      <button class="verify-btn" onclick="findDeliveryInfo()">
+        Verify Phone Number →
+      </button>
+
+      <div id="deliveryUI"></div>
+      <div id="deliveryOptions"></div>
+    </div>
   </div>
+
+  <!-- BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="store" onclick="switchPage('store')">
+      <span class="nav-icon">🏪</span>
+      <span class="nav-label">Store</span>
+    </button>
+    <button class="nav-btn" data-page="cart" onclick="switchPage('cart')">
+      <span class="nav-icon">🛒</span>
+      <span class="nav-label">Cart</span>
+      <span class="nav-badge" id="navCartBadge">0</span>
+    </button>
+    <button class="nav-btn" data-page="details" onclick="switchPage('details')">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Details</span>
+    </button>
+  </nav>
 
   <script src="script.js"></script>
-
 </body>
+
 </html>
