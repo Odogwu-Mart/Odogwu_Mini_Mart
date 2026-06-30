@@ -13,11 +13,13 @@ body{
 .header {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 6px;
   background: #FFBE1A;
-  padding: 18px;
-  border-radius: 0 0 20px 20px; /* Flat on top to align with screen edge */
-  margin-bottom: 20px;
+  padding: 8px 12px;
+  border-radius: 0 0 20px 20px;
+  margin-bottom: 12px;
+  max-height: 25vh;
+  overflow-y: auto;
 }
 
 /* Pinned Sticky Behavior */
@@ -26,13 +28,20 @@ body{
   top: 0;
   z-index: 1000;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  margin: -20px -20px 20px -20px; /* Counters body padding to sit flush */
+  margin: -20px -20px 12px -20px;
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .title {
   color: #000000;
-  font-size: 15px;
+  font-size: 11px;
   font-weight: 800;
+  line-height: 1;
 }
 
 /* Forces everything onto a single line */
@@ -40,7 +49,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 6px;
   width: 100%;
 }
 
@@ -50,14 +59,16 @@ body{
   align-items: center;
   flex: 1; 
   background: white;
-  border-radius: 14px;
-  padding: 4px 6px 4px 12px;
+  border-radius: 10px;
+  padding: 3px 5px 3px 8px;
   position: relative;
+  height: 32px;
 }
 
 .search-icon {
-  font-size: 16px;
-  margin-right: 5px;
+  font-size: 13px;
+  margin-right: 4px;
+  flex-shrink: 0;
 }
 
 .search-bar-inner {
@@ -65,9 +76,10 @@ body{
   border: none;
   background: transparent;
   outline: none;
-  padding: 10px 0;
-  font-size: 14px;
+  padding: 4px 0;
+  font-size: 12px;
   width: 100%;
+  line-height: 1;
 }
 
 /* Category Button Inside the Search Bar */
@@ -101,19 +113,34 @@ body{
   color: white;
   border: none;
   border-radius: 50px;
-  padding: 0 16px;
-  height: 48px;
+  padding: 0 12px;
+  height: 32px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   font-weight: 800;
-  font-size: 15px;
+  font-size: 11px;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .cart-btn-single:hover {
   background: #595858;
+}
+
+.cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: #FF0004;
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
 }
 
 /* Mobile Media Query Overrides */
@@ -124,10 +151,186 @@ body{
   .hide-mobile {
     display: none; /* Hides the word "Cart", keeping only the icon */
   }
+
+  .header {
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .search-bar-container {
+    height: 28px;
+  }
+
+  .search-bar-inner {
+    font-size: 11px;
+  }
+
+  .cart-btn-single {
+    height: 28px;
+    font-size: 10px;
+    padding: 0 10px;
+  }
 }
 
 /* ═══════════════════════════════════════
-   CATEGORY DROPDOWN
+   CATEGORY CHIPS SECTION
+═══════════════════════════════════════ */
+
+.category-chips-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.chips-scroll-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-behavior: smooth;
+}
+
+.chips-wrapper {
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  background: #ffffff;
+  border: 1.5px solid #ddd;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  color: #333;
+  line-height: 1;
+  height: 28px;
+}
+
+.category-chip:hover {
+  border-color: #FF0004;
+  background: #fff5f5;
+}
+
+.category-chip.active {
+  background: #FF0004;
+  color: white;
+  border-color: #FF0004;
+  box-shadow: 0 2px 8px rgba(255, 0, 4, 0.3);
+}
+
+.chips-expand-btn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #ddd;
+  border-radius: 14px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.chips-expand-btn:hover {
+  border-color: #FF0004;
+  background: #fff5f5;
+}
+
+.chips-expand-btn.expanded {
+  border-color: #FF0004;
+  background: #FF0004;
+  color: white;
+}
+
+.chips-expand-btn.expanded span {
+  color: white;
+  transform: rotate(180deg);
+}
+
+.category-expanded-menu {
+  display: none;
+  background: white;
+  border: 2px solid #FF0004;
+  border-radius: 12px;
+  padding: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+  animation: slideDown 0.3s ease;
+}
+
+.category-expanded-menu.open {
+  display: flex;
+}
+
+.category-menu-item {
+  flex: 0 1 calc(50% - 3px);
+  padding: 8px;
+  background: #f8f8f8;
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.2s ease;
+  color: #333;
+  line-height: 1;
+}
+
+.category-menu-item:hover {
+  background: #fff5f5;
+  border-color: #FF0004;
+}
+
+.category-menu-item.active {
+  background: #FF0004;
+  border-color: #FF0004;
+  color: white;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .category-chip {
+    font-size: 10px;
+    padding: 4px 8px;
+    height: 24px;
+  }
+
+  .chips-expand-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+
+  .category-menu-item {
+    font-size: 10px;
+    padding: 6px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   CATEGORY DROPDOWN (Archived - no longer used)
 ═══════════════════════════════════════ */
 
 .cat-wrapper{
@@ -236,12 +439,20 @@ body{
   background:#FFFFFF;
   border-radius:18px;
   overflow:hidden;
+  position: relative;
+}
+
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
 .card-img{
   width:100%;
   height:220px;
   object-fit:cover;
+  display: block;
 }
 
 .card-content{
@@ -317,9 +528,9 @@ body{
 }
 
 .modal-title {
-  font-size: 20px;       /* Increase this number to make it bigger (e.g., 28px, 32px) */
-  font-weight: 900;      /* Keeps it thick and bold to match your brand */
-  color: #111;           /* Optional: change the text color here */
+  font-size: 20px;
+  font-weight: 900;
+  color: #111;
 }
 
 .close-modal{
@@ -497,7 +708,7 @@ body{
 }
 
 .grand-total{
-  background:#FFFFFF;
+  background:#000000;
   color:white;
   border-radius:18px;
   padding:18px;
@@ -505,6 +716,18 @@ body{
   text-align:center;
   font-size:22px;
   font-weight:900;
+  border:2px solid #000000;
+}
+
+.done-btn{
+  background:#FF0004;
+  color:white;
+  border:none;
+  padding:16px;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
 }
 
 @media (max-width:600px){
@@ -523,29 +746,6 @@ body{
     left:0;
     max-width:80vw;
   }
-
-}
-
-.grand-total{
-
-  margin-top:20px;
-  padding:20px;
-  border-radius:18px;
-  background:#000000;
-  border:2px solid #000000;
-
-}
-
-.done-btn{
-
-  background:#FF0004;
-  color:white;
-  border:none;
-  padding:16px;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:800;
-  cursor:pointer;
 
 }
 
@@ -568,6 +768,7 @@ body{
   height: 54px;
   animation: spin 1s linear infinite;
 }
+
 @keyframes spin {
   0% { transform: rotate(0deg);}
   100% { transform: rotate(360deg);}
@@ -575,12 +776,7 @@ body{
 
 /* ═══════════════════════════════════════
    BANNER CAROUSEL
-   Add these styles to your existing CSS
 ═══════════════════════════════════════ */
-
-/* Outer wrapper — place this in your HTML:
-   <div id="bannerCarousel"></div>
-   above your products section            */
 
 #bannerCarousel {
   width: 100%;
@@ -593,7 +789,6 @@ body{
   width: 100%;
 }
 
-/* Sliding track */
 .banner-track {
   display: flex;
   transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
@@ -601,27 +796,24 @@ body{
   cursor: pointer;
 }
 
-/* Each slide takes the full width */
 .banner-slide {
   flex: 0 0 100%;
   width: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 14px;   /* round corners — adjust to match your card style */
+  border-radius: 14px;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Banner image fills the slide */
 .banner-img {
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
-  pointer-events: none;   /* clicks handled by parent div */
+  pointer-events: none;
 }
 
-/* ── Dot indicators ── */
 .banner-dots {
   display: flex;
   justify-content: center;
@@ -640,11 +832,10 @@ body{
 }
 
 .banner-dot.active {
-  background: #FF0004;   /* match your brand colour */
+  background: #FF0004;
   transform: scale(1.35);
 }
 
-/* ── Active-filter pill shown above products ── */
 .banner-filter-pill {
   display: flex;
   align-items: center;
@@ -671,20 +862,24 @@ body{
   margin-left: auto;
 }
 
-/* PWA Install Button */
+/* ═══════════════════════════════════════
+   PWA INSTALL BUTTON
+═══════════════════════════════════════ */
+
 .install-pwa-btn {
   background: #FFBE1A;
   color: #111;
   border: none;
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  border-radius: 15px;
   font-weight: 900;
-  font-size: 12px;
+  font-size: 10px;
   cursor: pointer;
   align-items: center;
-  gap: 5px;
+  gap: 3px;
   transition: transform 0.2s ease, background 0.2s ease;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  flex-shrink: 0;
 }
 
 .install-pwa-btn:hover {
@@ -696,20 +891,6 @@ body{
    PRODUCT TAG BADGES
 ═══════════════════════════════════════ */
 
-/* Container wrapper for image + tags */
-.card-image-wrapper {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.card-img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Tag badges container — positioned top-right */
 .product-tags {
   position: absolute;
   top: 8px;
@@ -721,7 +902,6 @@ body{
   max-width: 85%;
 }
 
-/* Individual tag badge styling */
 .tag-badge {
   display: inline-block;
   background: #FC0606;
@@ -739,14 +919,12 @@ body{
   letter-spacing: 0.5px;
 }
 
-/* Optional: Hover effect */
 .tag-badge:hover {
   background: #e60505;
   transform: scale(1.05);
   transition: all 0.2s ease;
 }
 
-/* Alternative color scheme (if needed) */
 .tag-badge.new {
   background: #00a86b;
 }
@@ -759,12 +937,6 @@ body{
   background: #a020f0;
 }
 
-/* Ensure card still looks good */
-.card {
-  position: relative;
-}
-
-/* Mobile responsive adjustments */
 @media (max-width: 480px) {
   .tag-badge {
     font-size: 10px;
