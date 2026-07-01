@@ -1,165 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Store</title>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Odogwu Mini-Mart</title>
   <link rel="icon" type="image/png" href="icon-192.png">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#FC0606">
+  <meta name="theme-color" content="#FFBE1A">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
-    rel="stylesheet"
-  >
-
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<div id="loadingOverlay" style="display: none;">
-  <div class="loader"></div>
-</div>
+  <!-- LOADING OVERLAY -->
+  <div id="loadingOverlay" style="display: none;">
+    <div class="loader"></div>
+  </div>
   
-<div class="header sticky-header">
-
-<div class="title-wrapper" style="display: flex; align-items: center; gap: 12px;">
-      <div class="title">
-        🛍️ Odogwu Mini-Mart
-      </div>
-      <button id="installPwaBtn" class="install-pwa-btn" style="display: none;">
-        ⬇️ Install App
-      </button>
+  <!-- 30% SECONDARY: HEADER -->
+  <header class="header sticky-header">
+    <div class="title-wrapper">
+      <div class="title">🛍️ Odogwu Mini-Mart</div>
+      <button id="installPwaBtn" class="install-pwa-btn" style="display: none;">⬇️ Install</button>
     </div>
 
-    <div class="header-actions">
-
+    <div class="header-actions" id="headerActions">
       <div class="search-bar-container">
-        
         <span class="search-icon">🔍</span>
-        
-        <input
-          id="searchInput"
-          class="search-bar-inner"
-          type="text"
-          placeholder="Search products..."
-          oninput="renderProducts()"
-        >
+        <input id="searchInput" class="search-bar-inner" type="text" placeholder="Search products..." oninput="renderProducts()">
       </div>
-
-      <button class="cart-btn-single" onclick="openCart()">
-        <img id="cartIcon" src="" alt="Cart" style="display: none;">
-        <span id="cartFallback">🛒</span>
-        
-        <span class="hide-mobile">Cart</span>
-        <div class="cart-count" id="cartCount">0</div>
-      </button>
-
     </div>
 
-	<!-- CATEGORY CHIPS SECTION -->
-<div id="categoryChipsSection" class="category-chips-section">
-  <div class="chips-scroll-container">
-    <div class="chips-wrapper" id="chipsWrapper"></div>
-    <button class="chips-expand-btn" id="chipsExpandBtn" onclick="toggleCategoryExpand()">
-      <span id="expandArrow">▼</span>
-    </button>
-  </div>
-  <div class="category-expanded-menu" id="categoryExpandedMenu"></div>
-</div>
+    <!-- CATEGORY CHIPS SECTION -->
+    <div id="categoryChipsSection" class="category-chips-section">
+      <div class="chips-scroll-container">
+        <div class="chips-wrapper" id="chipsWrapper"></div>
+        <button class="chips-expand-btn" id="chipsExpandBtn" onclick="toggleCategoryExpand()">
+          <span id="expandArrow">▼</span>
+        </button>
+      </div>
+      <div class="category-expanded-menu" id="categoryExpandedMenu"></div>
+    </div>
+  </header>
 
-  </div>
+  <!-- VIEW 1: STORE -->
+  <main id="storeView" class="view-container">
+    <div id="bannerCarousel"></div>
+    <div class="products" id="products"></div>
+  </main>
 
-<div id="bannerCarousel"></div>
-  
-  <div
-    class="products"
-    id="products"
-  ></div>
-
-  <!-- CART -->
-
-  <div
-    class="modal-overlay"
-    id="cartModal"
-  >
-
-    <div class="modal-box">
-
-      <div class="modal-header">
-
-        <div class="modal-title">
-          🛒 Your Cart
+  <!-- VIEW 2: DETAILS -->
+  <main id="detailsView" class="view-container" style="display: none;">
+    <div class="details-container">
+      <h2>My Delivery Details</h2>
+      <div class="details-card">
+        <div class="info-row">
+          <span class="label">Full Name</span>
+          <span id="detailName" class="value">Not provided yet</span>
         </div>
-
-        <button
-          class="close-modal"
-          onclick="closeCart()"
-        >
-          ✕
-        </button>
-
+        <div class="info-row">
+          <span class="label">Phone Number</span>
+          <span id="detailPhone" class="value">Not provided yet</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Address (Nearest Bus Stop)</span>
+          <span id="detailAddress" class="value">Not provided yet</span>
+        </div>
       </div>
+      <button class="checkout-btn" style="width: 100%; margin-top: 24px;" onclick="openDeliveryForm()">
+        Update Delivery Details
+      </button>
+    </div>
+  </main>
 
+  <!-- 30% SECONDARY: BOTTOM NAVIGATION BAR -->
+  <nav class="bottom-nav">
+    <button id="navStore" class="nav-btn active" onclick="switchTab('store')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-text">Store</span>
+    </button>
+    <button id="navCart" class="nav-btn" onclick="openCart()">
+      <div class="nav-cart-wrapper">
+        <span class="nav-icon">🛒</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+      <span class="nav-text">Cart</span>
+    </button>
+    <button id="navDetails" class="nav-btn" onclick="switchTab('details')">
+      <span class="nav-icon">👤</span>
+      <span class="nav-text">Details</span>
+    </button>
+  </nav>
+
+  <!-- SLIDE-UP CART MODAL -->
+  <div class="modal-overlay cart-overlay" id="cartModal">
+    <div class="modal-box cart-slide-box">
+      <div class="modal-header">
+        <div class="modal-title">🛒 Your Cart</div>
+        <button class="close-modal" onclick="closeCart()">✕</button>
+      </div>
       <div id="cartItems"></div>
-
-      <button
-        class="checkout-btn"
-        onclick="openCheckout()"
-      >
-
+      <button class="checkout-btn" style="width:100%; margin-top:16px;" onclick="openCheckout()">
         Proceed To Checkout →
-
       </button>
 
-      <!-- CHECKOUT -->
-
-      <div
-        class="checkout-form"
-        id="checkoutForm"
-      >
-
-        <input
-          type="tel"
-          id="checkoutPhone"
-          placeholder="Enter your delivery phone number"
-        >
-
-        <button
-          class="checkout-btn"
-          onclick="findDeliveryInfo()"
-        >
-
-          Continue →
-
-        </button>
-
+      <!-- CHECKOUT SECTION INSIDE CART -->
+      <div class="checkout-form" id="checkoutForm">
+        <input type="tel" id="checkoutPhone" placeholder="Enter your delivery phone number">
+        <button class="checkout-btn" style="width:100%;" onclick="findDeliveryInfo()">Continue →</button>
         <div id="deliveryUI"></div>
-        
         <div id="deliveryOptions"></div>
-
       </div>
-
     </div>
-
   </div>
 
   <script src="script.js"></script>
-
 </body>
 </html>
