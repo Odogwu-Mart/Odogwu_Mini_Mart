@@ -618,6 +618,27 @@ async function saveOrderToSheet4(orderData){
 /* ═══════════════════════════════════════
    START ENGINE
 ═══════════════════════════════════════ */
+
+function isIos() {
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  return /iphone|ipad|ipod/.test(userAgent);
+}
+
+function isStandalone() {
+  return ('standalone' in window.navigator) && (window.navigator.standalone);
+}
+
+// Update your UI Logic
+if (isIos() && !isStandalone()) {
+  // Show a specific "How to Install" button for iOS users
+  const installBtn = document.getElementById('installPwaBtn');
+  if (installBtn) {
+    installBtn.style.display = 'flex';
+    installBtn.innerText = "Install: Tap Share → Add to Home Screen";
+  }
+}
+
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(() => {}); });
 }
